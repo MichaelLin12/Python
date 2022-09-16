@@ -40,7 +40,11 @@ def shred(filename):
     X=dict()
     with open (filename,encoding='utf-8') as f:
         # TODO: add your code here
-
+        temp = f.read(1)
+        while(temp != '/n'):
+            print(temp)
+            temp = f.read(1)
+    f.close()
     return X
 
 
@@ -48,3 +52,6 @@ def shred(filename):
 # TODO: add your code here for the assignment
 # You are free to implement it as you wish!
 # Happy Coding!
+
+if __name__ == '__main__':
+    vals = shred('letter.txt')
