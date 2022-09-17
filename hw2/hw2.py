@@ -54,4 +54,4 @@ def shred(filename):
 # Happy Coding!
 
 if __name__ == '__main__':
-    vals = shred('letter.txt')
+    vals = shred('./hw2/letter.txt')
