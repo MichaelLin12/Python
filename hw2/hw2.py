@@ -1,5 +1,7 @@
 import sys
 import math
+import string
+import re
 
 
 def get_parameter_vectors():
@@ -38,12 +40,14 @@ def shred(filename):
     #Using a dictionary here. You may change this to any data structure of
     #your choice such as lists (X=[]) etc. for the assignment
     X=dict()
+    for char in string.ascii_uppercase:
+        X[char] = 0
     with open (filename,encoding='utf-8') as f:
         # TODO: add your code here
-        temp = f.read(1)
-        while(temp != '/n'):
-            print(temp)
-            temp = f.read(1)
+        file = f.read()
+        for temp in file:
+            if(re.match('[A-Za-z]',temp)):
+                X[temp.upper()]+=1
     f.close()
     return X
 
@@ -53,5 +57,62 @@ def shred(filename):
 # You are free to implement it as you wish!
 # Happy Coding!
 
+
+def Q1(vals):
+    print('Q1')
+    #print out dictionary
+    for key,val in vals.items():
+        print(key,val)
+
+def Q2(vals,english,spanish):
+    print('Q2')
+    # find X_1 * log(e_1) and X_1 * log(s_1)
+    first = vals['A'] * math.log(english[0])
+    second = vals['A'] * math.log(spanish[0])
+    # format and print value
+    print('{:.4f}'.format(first))
+    print('{:.4f}'.format(second))   
+
+def Q3(vals,english,spanish):
+    print('Q3')
+    eng = 0.6
+    spa = 0.4
+    letters_to_vals = list(vals.values())
+    # find log(P(Y=y))
+    f_part_en = math.log(eng)
+    f_part_sp = math.log(spa)
+    # find summation for english and spanish
+    s_part_en = 0
+    s_part_sp = 0
+    for i in range(26):
+        s_part_en += letters_to_vals[i] * math.log(english[i])
+        s_part_sp += letters_to_vals[i] * math.log(spanish[i])
+    
+    culm_eng = f_part_en + s_part_en
+    culm_spa = f_part_sp + s_part_sp
+
+    print('{:.4f}'.format(culm_eng))
+    print('{:.4f}'.format(culm_spa))
+
+    return (culm_eng,culm_spa)
+
+
+
+# Compute P(Y=English|X)
+def Q4(F_eng,F_spa):
+    print('Q4')
+    if(F_spa - F_eng >= 100):
+        print(0)
+    elif(F_spa - F_eng <= -100):
+        print(1)
+    else:
+        res = 1/(1+math.e **(F_spa - F_eng))
+        print('{:.4f}'.format(res))
+
 if __name__ == '__main__':
-    vals = shred('./hw2/letter.txt')
+    vals = shred('letter.txt')
+    english,spanish = get_parameter_vectors()
+    Q1(vals)
+    Q2(vals,english,spanish)
+    F_eng,F_spa = Q3(vals,english,spanish)
+    Q4(F_eng,F_spa)
