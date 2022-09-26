@@ -65,7 +65,6 @@ def display_image(orig, proj):
     # Your implementation goes here!
     orig_img = orig.resize(32,32)
     proj_img = proj.resize(32,32)
-    pass
 
 if __name__ == "__main__":
     x = load_and_center_dataset('YaleB_32x32.npy')
