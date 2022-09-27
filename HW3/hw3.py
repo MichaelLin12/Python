@@ -66,7 +66,7 @@ def display_image(orig, proj):
     orig_img = np.reshape(orig,(32,32))
     proj_img = np.reshape(proj,(32,32))
 
-    fig, (ax1,ax2) = plt.subplots(1,2,sharex='col')
+    fig, (ax1,ax2) = plt.subplots(1,2)
 
     ax1.set_title("Original")
     ax2.set_title("Projection")
