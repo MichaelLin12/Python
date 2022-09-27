@@ -63,16 +63,10 @@ def project_image(image, U):
 
 def display_image(orig, proj):
     # Your implementation goes here!
+    print(orig.shape)
+    print(proj.shape)
     #orig_img = orig.resize(32,32)
     #proj_img = proj.resize(32,32)
-
-    x = np.linspace(0, 2 * np.pi, 400)
-    y = np.sin(x ** 2)
-
-    fig, ax = plt.subplots()
-    ax.plot(x, y)
-    ax.set_title('A single plot')
-    print(ax)
 
 if __name__ == "__main__":
     x = load_and_center_dataset('YaleB_32x32.npy')
