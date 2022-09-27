@@ -63,22 +63,18 @@ def project_image(image, U):
 
 def display_image(orig, proj):
     # Your implementation goes here!
-    print(orig.shape)
-    print(proj.shape)
-    #orig_img = orig.resize(32,32)
-    #proj_img = proj.resize(32,32)
+    orig_img = np.reshape(orig,(32,32))
+    proj_img = np.reshape(proj,(32,32))
 
-if __name__ == "__main__":
-    x = load_and_center_dataset('YaleB_32x32.npy')
-    print(len(x), len(x[0]),np.average(x)) # 2414 1024 -8.315174931741023e-17
-    covariance_x = get_covariance(x)
-    print(np.shape(covariance_x)) # 1024 x 1024
-    Lambda, U = get_eig(covariance_x,2)
-    print("Lambda",Lambda)
-    print("U",U)
-    Lambda,U = get_eig_prop(covariance_x,0.07)
-    print("Lambda",Lambda)
-    print("U: ",U)
-    projection = project_image(x[0],U)
-    print("Projection:",projection)
-    display_image(x[0], projection)
+    fig, (ax1,ax2) = plt.subplots(1,2,sharex='col')
+
+    ax1.set_title("Original")
+    ax2.set_title("Projection")
+
+    imgOrig = ax1.imshow(np.rot90(orig_img,-1),aspect='equal')
+    imgProj = ax2.imshow(np.rot90(proj_img,-1),aspect='equal')
+
+    fig.colorbar(imgOrig,ax=ax1)
+    fig.colorbar(imgProj,ax=ax2)
+
+    plt.show()
