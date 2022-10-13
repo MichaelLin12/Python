@@ -120,7 +120,7 @@ def hac(features):
 
     return Z
 
-# TODO: Finish writing out this function by visualizing the alegomoratic clustering
+# vizualize the complete linkage
 def imshow_hac(Z):
     dendrogram = hierarchy.dendrogram(Z)
     plt.show()
