@@ -41,8 +41,9 @@ def Q2(filename):
     plt.plot(df["year"], df["days"])
     plt.xlabel("Year")
     plt.ylabel("Number of Frozen Days")
+    fig1 = plt.gcf()
     plt.show()
-    plt.savefig("plot.jpg")
+    fig1.savefig("plot.jpg")
 
     return df
 
@@ -92,8 +93,6 @@ def Q3(df):
     P_I = Q3e(I,X)
     print("Q3e:")
     print(P_I)
-    print(P_I.shape)
-    print(Y.shape)
     beta = Q3f(P_I,Y)
     print("Q3f:")
     print(beta)
@@ -101,7 +100,8 @@ def Q3(df):
     return beta
 
 def Q4(beta_hat):
-    return beta_hat[0,0] + beta_hat[1,0]*2021
+    ans = beta_hat[0,0] + beta_hat[1,0]*2021
+    print("Q4:", ans)
 
 def Q5(beta_hat):
     # Part A
@@ -111,7 +111,7 @@ def Q5(beta_hat):
         print("Q5a:","=")
     else:
         print("Q5a:","<")
-    print("Q5b:","The sign of Beta hat 1 refers to the fact the number of frozen days decreases by Beta hat 1 each year")
+    print("Q5b:","The sign of Beta hat 1 refers to the fact the number of frozen days decreases by Beta hat 1 each succesive year")
 
 def Q6(beta_hat):
     r_hand = -1 * beta_hat[0,0]
