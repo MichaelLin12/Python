@@ -42,7 +42,6 @@ def Q2(filename):
     plt.xlabel("Year")
     plt.ylabel("Number of Frozen Days")
     fig1 = plt.gcf()
-    plt.show()
     fig1.savefig("plot.jpg")
 
     return df
@@ -119,3 +118,10 @@ def Q6(beta_hat):
 
     print("Q6a:",r_hand)
     print("Q6b:","I would say that x* is a compelling prediction based on the data. Based on the data we see that the overall trend from year to year is that the number of days the lake is frozen with ice is decreasing. Furthermore, we can make an educated guess from the graph that rate of decrease is generally linear, which is exactly what our function is. Therefore, the answer makes sense.")
+
+if __name__ == "__main__":
+    df = Q2(sys.argv[1])
+    beta_hat = Q3(df)
+    Q4(beta_hat)
+    Q5(beta_hat)
+    Q6(beta_hat)
