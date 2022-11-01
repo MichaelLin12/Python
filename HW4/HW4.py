@@ -90,6 +90,9 @@ def merge_features(features,i,j,x,n):
 
 
 def hac(features):
+    if(len(features) == 1):
+        Z = features[0].astype(np.float64)
+
     # define variables
     Z = np.zeros((len(features)-1,4),dtype=np.float64)
     d_matrix = calculate_distance_matrix(features)
@@ -127,6 +130,6 @@ def imshow_hac(Z):
 
 
 if __name__ == "__main__":
-    n = 30
-    Z = hac([calc_features(row) for row in load_data('Pokemon.csv')][:n])
-    imshow_hac(Z)
+    for n in range(2,30):
+        Z = hac([calc_features(row) for row in load_data('Pokemon.csv')][:n])
+        imshow_hac(Z)
