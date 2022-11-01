@@ -127,9 +127,3 @@ def hac(features):
 def imshow_hac(Z):
     dendrogram = hierarchy.dendrogram(Z)
     plt.show()
-
-
-if __name__ == "__main__":
-    for n in range(2,30):
-        Z = hac([calc_features(row) for row in load_data('Pokemon.csv')][:n])
-        imshow_hac(Z)
