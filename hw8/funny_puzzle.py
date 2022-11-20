@@ -1,5 +1,6 @@
 import heapq
 import math
+from itertools import permutations
 
 
 
@@ -214,11 +215,19 @@ if __name__ == "__main__":
     Feel free to write your own test code here to exaime the correctness of your functions.
     Note that this part will not be graded.
     """
-    print_succ([0,2,3,4,0,5,7,6,1])
-    print()
+    # print_succ([0,2,3,4,0,5,7,6,1])
+    # print()
 
-    print(get_manhattan_distance([2,5,1,4,3,6,7,0,0], [1, 2, 3, 4, 5, 6, 7, 0, 0]))
-    print()
+    # print(get_manhattan_distance([2,5,1,4,3,6,7,0,0], [1, 2, 3, 4, 5, 6, 7, 0, 0]))
+    # print()
 
-    solve([4,3,0,5,1,6,7,2,0])
-    print()
+    # solve([4,3,0,5,1,6,7,2,0])
+    # print()
+
+    l = list(permutations([1,2,3,4,5,6,7,0,0]))
+    for permutation in l:
+        permutation = list(permutation)
+        print(permutation)
+        print()
+        solve(permutation)
+        print()
