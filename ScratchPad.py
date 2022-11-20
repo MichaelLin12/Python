@@ -14,3 +14,5 @@ import numpy as np
 print((33*48127 + 31415)%65536)
 
 print((33761*(45584 - 31415))%65536)
+
+print(f"Acurracy: {round(0.8,2):.2f}")

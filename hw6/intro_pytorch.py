@@ -78,8 +78,8 @@ def evaluate_model(model, test_loader, criterion, show_loss=True):
             correct += (predicted == labels).sum().item()
 
     if(show_loss):            
-        print(f"Average loss: {round(running_loss/len(test_loader),4)}")
-    print(f"Acurracy: {round(correct/total * 100,2)}%")   
+        print(f"Average loss: {round(running_loss/len(test_loader),4):.4f}")
+    print(f"Acurracy: {round(correct/total * 100,2):.2f}%")   
 
 def predict_label(model, test_images, index):
     prob = F.softmax(model(test_images[index]),dim=1)

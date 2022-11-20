@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import shutil
 from subprocess import Popen, PIPE, TimeoutExpired
 import filecmp
 import subprocess
