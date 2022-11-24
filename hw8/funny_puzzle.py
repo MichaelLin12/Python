@@ -1,6 +1,7 @@
 import heapq
 import math
 from itertools import permutations
+from itertools import combinations
 
 
 
@@ -148,16 +149,21 @@ def solve(state, goal_state=[1, 2, 3, 4, 5, 6, 7, 0, 0]):
     WHAT IT SHOULD DO:
         Prints a path of configurations from initial state to goal state along  h values, number of moves, and max queue number in the format specified in the pdf.
     """
+    if(state == goal_state):
+        visited = [goal_state]
+        max_count = 1
+        print(f"{goal_state} h={get_manhattan_distance(goal_state)} moves: {0}")
+        print("Max queue length:",1)
+    else:
+        # A* algorithm
+        visited,max_count = forward(state, goal_state)
 
-    # A* algorithm
-    visited,max_count = forward(state, goal_state)
+        # go backward to find move
+        path = backward(visited)
 
-    # go backward to find move
-    path = backward(visited)
-
-    for i,j in enumerate(path):
-        print(f"{j} h={get_manhattan_distance(j)} moves: {i}")
-    print("Max queue length:",max_count)
+        for i,j in enumerate(path):
+            print(f"{j} h={get_manhattan_distance(j)} moves: {i}")
+        print("Max queue length:",max_count)
 
 def forward(state, goal_state):
     max_heap = 1
@@ -218,13 +224,10 @@ if __name__ == "__main__":
     print_succ([3, 4, 6, 0, 0, 1, 7, 2, 5])
     print()
 
-    solve([3, 4, 6, 0, 0, 1, 7, 2, 5])
+    solve([4,3,0,5,1,6,7,2,0])
     print()
 
-    # l = list(permutations([1,2,3,4,5,6,7,0,0]))
-    # for permutation in l:
-    #     permutation = list(permutation)
-    #     print(permutation)
-    #     print()
-    #     solve(permutation)
-    #     print()
+    solve([1,2,3,4,5,6,7,0,0])
+    print()
+
+    
