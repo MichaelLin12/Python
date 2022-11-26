@@ -149,21 +149,15 @@ def solve(state, goal_state=[1, 2, 3, 4, 5, 6, 7, 0, 0]):
     WHAT IT SHOULD DO:
         Prints a path of configurations from initial state to goal state along  h values, number of moves, and max queue number in the format specified in the pdf.
     """
-    if(state == goal_state):
-        visited = [goal_state]
-        max_count = 1
-        print(f"{goal_state} h={get_manhattan_distance(goal_state)} moves: {0}")
-        print("Max queue length:",1)
-    else:
-        # A* algorithm
-        visited,max_count = forward(state, goal_state)
+    # A* algorithm
+    visited,max_count = forward(state, goal_state)
 
-        # go backward to find move
-        path = backward(visited)
+    # go backward to find move
+    path = backward(visited)
 
-        for i,j in enumerate(path):
-            print(f"{j} h={get_manhattan_distance(j)} moves: {i}")
-        print("Max queue length:",max_count)
+    for i,j in enumerate(path):
+        print(f"{j} h={get_manhattan_distance(j)} moves: {i}")
+    print("Max queue length:",max_count)
 
 def forward(state, goal_state):
     max_heap = 1
@@ -205,7 +199,7 @@ def inClosed(successor,open,closed):
 def backward(visited):
     path = []
     goal = visited[len(visited) - 1]
-    i = len(visited) - 1
+    i = goal[2][2]
     path.append(goal[1])
     temp = visited[goal[2][2]]
     while(i >= 0):
