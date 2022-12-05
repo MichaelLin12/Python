@@ -1,5 +1,6 @@
 import random
-
+import math
+import time
 
 class TeekoPlayer:
     """ An object representation for an AI game player for the game Teeko.
@@ -41,26 +42,259 @@ class TeekoPlayer:
             will earn you no points.
         """
 
-        drop_phase = True  # TODO: detect drop phase
+        t0 = time.time()
+        max_val, move = self.max_value(state,depth=2)
+        t1 = time.time()
+        print(t1-t0)
 
-        if not drop_phase:
-            # TODO: choose a piece to move and remove it from the board
-            # (You may move this condition anywhere, just be sure to handle it)
-            #
-            # Until this part is implemented and the move list is updated
-            # accordingly, the AI will not follow the rules after the drop phase!
-            pass
-
-        # select an unoccupied space randomly
-        # TODO: implement a minimax algorithm to play better
-        move = []
-        (row, col) = (random.randint(0, 4), random.randint(0, 4))
-        while not state[row][col] == ' ':
-            (row, col) = (random.randint(0, 4), random.randint(0, 4))
-
-        # ensure the destination (row,col) tuple is at the beginning of the move list
-        move.insert(0, (row, col))
         return move
+
+        # TODO: detect drop phase
+    def detect_drop_phase(self, state):
+        count = 0
+        for i in range(len(state)):
+            for j in range(len(state[i])):
+                count += 1 if state[i][j] != ' ' else 0
+
+        return True if count < 8 else False
+
+
+    # TODO: get all successors
+    def generate_successors(self, state, drop, piece):
+        successors = []
+
+        if drop:
+             # go through every possibility
+            for row in range(len(state)):
+                for col in range(len(state[row])):
+                    if state[row][col] == ' ':
+                        successors.append([(row,col)])
+
+        else:
+            # print("row:",len(state))
+            for row in range(len(state)):
+                for col in range(len(state[row])):
+                    # print("col:",len(state[row]))
+                    if state[row][col] == piece:
+                        if (row+1) < len(state) and (col) < len(state[row+1]) and  state[row+1][col] == ' ':
+                            #print("Hello")
+                            successors.append([(row+1,col),(row,col)])
+                        elif (row+1) < len(state) and (col+1) < len(state[row+1]) and  state[row+1][col+1] == ' ':
+                            #print("Happy")
+                            successors.append([(row+1,col+1),(row,col)])
+                        elif (row) < len(state) and (col+1) < len(state[row]) and  state[row][col+1] == ' ':
+                            #print("Sad")
+                            successors.append([(row,col+1),(row,col)])
+                        elif (row -1) >= 0 and (col+1) < len(state[row-1]) and  state[row-1][col+1] == ' ':
+                            #print("Here")
+                            successors.append([(row - 1,col+1),(row,col)])
+                        elif (row -1) >= 0 and (col) < len(state[row-1]) and  state[row-1][col] == ' ':
+                            #print("Where")
+                            successors.append([(row - 1,col),(row,col)])
+                        elif (row -1) >= 0 and (col-1) > 0 and  state[row-1][col-1] == ' ':
+                            #print("Hope")
+                            successors.append([(row - 1,col-1),(row,col)])
+                        elif (row) >= 0 and (col-1) >= 0 and  state[row][col-1] == ' ':
+                            #print("Hopeless")
+                            successors.append([(row,col-1),(row,col)])
+                        elif (row +1) < len(state) and (col-1) > 0 and  state[row+1][col-1] == ' ':
+                            #print("Bachlock")
+                            successors.append([(row + 1,col-1),(row,col)])
+                        
+
+        return successors
+
+        # TODO: return number describing state. 
+        # Implement hueristic when not terminal state
+    def evaluate_game(self, state, piece):
+        """
+        # Args: state->state of game::piece-> piece to be moved
+        # if we detect a terminal state 
+        # find the max length of numbers pieces in the right order for a possible win
+        # my_score will add one for each piece in the correct place
+        # opp_score will subtract one for each piece in the correct place
+        # we will divide by 4 to keep the number between 1 and -1
+        # if the absolute value of the two scores are equal then whoever goes first has the upper hand
+        # if the absolute value of the my_score > opp_score and it is my_piece then return my_score
+        # if the absolute value of the my_score < opp_score and it is opp_piece then return abs(opp_score)
+        # the same goes true for opponent
+        """
+        if(self.game_value(state) != 0):
+            return 1 if self.my_piece == piece else -1
+
+        my_score = 0
+        opp_score = 0
+
+        for row in range(len(state)):
+            for col in range(len(state[row])):
+                temp_my = 0
+                temp_op = 0
+                # row
+                for i in range(col,min(col+4,len(state[row]))):
+                    if state[row][i] == self.my_piece:
+                        temp_my += 1
+                    if state[row][i] == self.opp:
+                        temp_op -=1
+                my_score = max(my_score,temp_my)
+                opp_score = min(opp_score,temp_op)
+                temp_my = 0
+                temp_op = 0
+
+                # for i in range(col,min(col+4,len(state[row]))):
+                #     if state[row][i] == self.opp:
+                #         temp -= 1
+                # opp_score = min(opp_score,temp)
+                # temp = 0
+
+                # column
+                for i in range(row,min(row+4,len(state))):
+                    if state[i][col] == self.my_piece:
+                        temp_my += 1
+                        temp_op -= 1
+                my_score = max(my_score,temp_my)
+                opp_score = max(opp_score,temp_op)
+                temp_my = 0
+                temp_op = 0
+
+                # for i in range(row,min(row+4,len(state))):
+                #     if state[i][col] == self.opp:
+                #         temp -= 1
+                # opp_score = min(opp_score,temp)
+                # temp = 0
+                # diagonal
+
+                # One Way
+                if state[row][col] == self.my_piece:
+                    temp_my += 1
+                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.my_piece:
+                    temp_my+=1
+                if row+2 < len(state) and col+2 < len(state[row]) and state[row+2][col+2] == self.my_piece:
+                    temp_my+=1
+                if row+3 < len(state) and col+3 < len(state[row]) and state[row+3][col+3] == self.my_piece:
+                    temp_my+=1
+                
+                my_score = max(my_score,temp_my)
+                temp_my = 0
+
+                if state[row][col] == self.opp:
+                    temp_op -= 1
+                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.opp:
+                    temp_op-=1
+                if row+2 < len(state) and col+2 < len(state[row]) and state[row+2][col+2] == self.opp:
+                    temp_op-=1
+                if row+3 < len(state) and col+3 < len(state[row]) and state[row+3][col+3] == self.opp:
+                    temp_op-=1
+
+                opp_score = min(opp_score,temp_op)
+                temp_op = 0
+
+                # Second Way
+                if state[row][col] == self.my_piece:
+                    temp_my += 1
+                if row+1 < len(state) and col-1 >=0 and state[row+1][col-1] == self.my_piece:
+                    temp_my+=1
+                if row+2 < len(state) and col-2 >= 0 and state[row+2][col-2] == self.my_piece:
+                    temp_my+=1
+                if row+3 < len(state) and col-3 >= 0 and state[row+3][col-3] == self.my_piece:
+                    temp_my+=1
+                
+                my_score = max(my_score,temp_my)
+                temp_my = 0
+
+                if state[row][col] == self.opp:
+                    temp_op -= 1
+                if row+1 < len(state) and col-1 >= 0 and state[row+1][col-1] == self.opp:
+                    temp_op-=1
+                if row+2 < len(state) and col-2 >= 0 and state[row+2][col-2] == self.opp:
+                    temp_op-=1
+                if row+3 < len(state) and col-3 >= 0 and state[row+3][col-3] == self.opp:
+                    temp_op-=1
+
+                opp_score = min(opp_score,temp_op)
+                temp = 0
+                
+                # box
+                if state[row][col] == self.my_piece:
+                    temp += 1
+                if row+1 < len(state) and state[row+1][col] == self.my_piece:
+                    temp+=1
+                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.my_piece:
+                    temp+=1
+                if  col+1 < len(state[row]) and state[row][col+1] == self.my_piece:
+                    temp+=1
+                
+                my_score = max(my_score,temp)
+                temp = 0
+
+                if state[row][col] == self.my_piece:
+                    temp += 1
+                if row+1 < len(state) and state[row+1][col] == self.my_piece:
+                    temp+=1
+                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.my_piece:
+                    temp+=1
+                if  col+1 < len(state[row]) and state[row][col+1] == self.my_piece:
+                    temp+=1
+                
+                opp_score = min(opp_score,temp)
+                temp = 0
+                
+
+        my_score = my_score/4
+        opp_score = opp_score/4
+
+        if(abs(my_score)>abs(opp_score) and self.my_piece == piece):
+            return my_score
+        elif(abs(my_score)>abs(opp_score) and self.my_piece != piece):
+            return abs(opp_score)
+        elif(abs(my_score)<abs(opp_score) and self.my_piece == piece):
+            return -1*my_score
+        elif(abs(my_score)>abs(opp_score) and self.my_piece != piece):
+            return opp_score
+        return 0
+
+        # TODO: max part of minimax
+    def max_value(self, state,depth):
+        alpha = -math.inf
+        max_successor = None
+        if(self.evaluate_game(state,self.my_piece) == 1 or depth == 0):
+            return self.evaluate_game(state,self.my_piece),None
+        else:
+            successors = self.generate_successors(state,self.detect_drop_phase(state),self.my_piece)
+            for successor in successors:
+                temp_state = self.generate_state(state,successor,self.my_piece)
+                alpha_prime,move = self.min_value(temp_state,depth-1)
+                if(alpha < alpha_prime or alpha == -math.inf):
+                    alpha = alpha_prime
+                    max_successor = successor
+        return alpha,max_successor
+
+        # TODO: min part of minimax
+    def min_value(self, state, depth):
+        alpha = math.inf
+        min_successor = state
+        if(self.evaluate_game(state,self.opp) == -1 or depth == 0):
+            return self.evaluate_game(state,self.opp),min_successor
+        else:
+            successors = self.generate_successors(state,self.detect_drop_phase(state),self.opp)
+            for successor in successors:
+                temp_state = self.generate_state(state,successor,self.opp)
+                alpha_prime,move = self.min_value(temp_state,depth-1)
+                if(alpha > alpha_prime or alpha == math.inf):
+                    alpha = alpha_prime
+                    min_successor = successor
+        return alpha,min_successor
+
+    def generate_state(self,state,move,piece):
+        new_state = []
+        for inner in state:
+            new_state.append(inner.copy())
+        # print(new_state)
+        if(len(move) == 1):
+            new_state[move[0][0]][move[0][1]] = piece
+        else:
+            new_state[move[0][0]][move[0][1]] = ' '
+            new_state[move[1][0]][move[1][1]] = piece
+        return new_state
 
     def opponent_move(self, move):
         """ Validates the opponent's next move against the internal board representation.
@@ -144,8 +378,33 @@ class TeekoPlayer:
                     return 1 if state[i][col] == self.my_piece else -1
 
         # TODO: check \ diagonal wins
-        # TODO: check / diagonal wins
+        # Right side
+        for row in range(2):
+            for col in range(2):
+                if state[row][col] != ' ' and state[row][col] == state[row+1][col+1] and state[row+1][col+1] == state[row+2][col+2] and state[row+2][col+2] == state[row+3][col+3]:
+                    return 1 if state[row][col] == self.my_piece else -1
+                
+        for row in range(3,5,1):
+            for col in range(2):
+                if state[row][col] != ' ' and state[row][col] == state[row-1][col+1] and state[row-1][col+1] == state[row-2][col+2] and state[row-2][col+2] == state[row-3][col+3]:
+                    return 1 if state[row][col] == self.my_piece else -1
+        # # TODO: check / diagonal wins
+        # # Left side
+        # for row in range(2):
+        #     for col in range(3,5,1):
+        #         if state[row][col] != ' ' and state[row][col] == state[row+1][col-1] and state[row+1][col-1] == state[row+2][col-2] and state[row+2][col-2] == state[row+3][col-3]:
+        #             return 1 if state[row][col] == self.my_piece else -1
+        
+        # for row in range(3,5,1):
+        #     for col in range(3,5,1):
+        #         if state[row][col] != ' ' and state[row][col] == state[row-1][col-1] and state[row-1][col-1] == state[row-2][col-2] and state[row-2][col-2] == state[row-3][col-3]:
+        #             return 1 if state[row][col] == self.my_piece else -1
         # TODO: check box wins
+        for row in range(4):
+            for col in range(4):
+                if state[row][col] != ' ' and state[row][col] == state[row+1][col] and state[row+1][col] == state[row+1][col+1] and state[row+1][col+1] == state[row][col+1]:
+                    return 1 if state[row][col] == self.my_piece else -1
+
 
         return 0  # no winner yet
 

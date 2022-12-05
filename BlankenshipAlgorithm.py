@@ -15,5 +15,5 @@ def blankinship(a,b, verbose=False):
     return brow[0], brow[1], brow[2]
 
 
-g,x,y = blankinship(65536,18199,True)
+g,x,y = blankinship(3,4,True)
 print(g, x,y)
