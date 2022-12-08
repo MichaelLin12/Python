@@ -11,8 +11,12 @@ import numpy as np
 # Y = np.asarray([4,-1,0,2])
 # print(np.linalg.inv(np.transpose(X)*X)*np.transpose(X)*y)
 
-print((33*48127 + 31415)%65536)
+# print((33*48127 + 31415)%65536)
 
-print((33761*(45584 - 31415))%65536)
+# print((33761*(45584 - 31415))%65536)
 
-print(f"Acurracy: {round(0.8,2):.2f}")
+# print(f"Acurracy: {round(0.8,2):.2f}")
+
+# print((20**20)%21)
+
+print(49%21)

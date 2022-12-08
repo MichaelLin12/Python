@@ -1,6 +1,7 @@
 import random
 import math
 import time
+import random
 
 class TeekoPlayer:
     """ An object representation for an AI game player for the game Teeko.
@@ -42,10 +43,14 @@ class TeekoPlayer:
             will earn you no points.
         """
 
-        t0 = time.time()
+        # t0 = time.time()
+        # print("State",state)
         max_val, move = self.max_value(state,depth=2)
-        t1 = time.time()
-        print(t1-t0)
+        # if(move == None):
+        #     # print("IDK")
+        #     # print(state)
+        # t1 = time.time()
+        # print(t1-t0)
 
         return move
 
@@ -60,7 +65,8 @@ class TeekoPlayer:
 
 
     # TODO: get all successors
-    def generate_successors(self, state, drop, piece):
+    def succ(self, state, piece):
+        drop = self.detect_drop_phase(state)
         successors = []
 
         if drop:
@@ -106,7 +112,7 @@ class TeekoPlayer:
 
         # TODO: return number describing state. 
         # Implement hueristic when not terminal state
-    def evaluate_game(self, state, piece):
+    def hueristic_game_value(self, state, piece):
         """
         # Args: state->state of game::piece-> piece to be moved
         # if we detect a terminal state 
@@ -120,149 +126,133 @@ class TeekoPlayer:
         # the same goes true for opponent
         """
         if(self.game_value(state) != 0):
-            return 1 if self.my_piece == piece else -1
+            return self.game_value(state)
 
-        my_score = 0
-        opp_score = 0
-
-        for row in range(len(state)):
-            for col in range(len(state[row])):
-                temp_my = 0
-                temp_op = 0
-                # row
-                for i in range(col,min(col+4,len(state[row]))):
-                    if state[row][i] == self.my_piece:
-                        temp_my += 1
-                    if state[row][i] == self.opp:
-                        temp_op -=1
-                my_score = max(my_score,temp_my)
-                opp_score = min(opp_score,temp_op)
-                temp_my = 0
-                temp_op = 0
-
-                # for i in range(col,min(col+4,len(state[row]))):
-                #     if state[row][i] == self.opp:
-                #         temp -= 1
-                # opp_score = min(opp_score,temp)
-                # temp = 0
-
-                # column
-                for i in range(row,min(row+4,len(state))):
-                    if state[i][col] == self.my_piece:
-                        temp_my += 1
-                        temp_op -= 1
-                my_score = max(my_score,temp_my)
-                opp_score = max(opp_score,temp_op)
-                temp_my = 0
-                temp_op = 0
-
-                # for i in range(row,min(row+4,len(state))):
-                #     if state[i][col] == self.opp:
-                #         temp -= 1
-                # opp_score = min(opp_score,temp)
-                # temp = 0
-                # diagonal
-
-                # One Way
-                if state[row][col] == self.my_piece:
-                    temp_my += 1
-                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.my_piece:
-                    temp_my+=1
-                if row+2 < len(state) and col+2 < len(state[row]) and state[row+2][col+2] == self.my_piece:
-                    temp_my+=1
-                if row+3 < len(state) and col+3 < len(state[row]) and state[row+3][col+3] == self.my_piece:
-                    temp_my+=1
+        score = 0
+        # find all scores of winning rows
+        for row in range(5):
+            for col in range(2):
+                temp_score = 0
+                my_score = 0
+                opp_score = 0
+                my_score += 1 if state[row][col] == self.my_piece else 0
+                my_score += 1 if state[row][col+1] == self.my_piece else 0
+                my_score += 1 if state[row][col+2] == self.my_piece else 0
+                my_score += 1 if state[row][col+3] == self.my_piece else 0
+                opp_score += -1 if state[row][col] == self.opp else 0
+                opp_score += -1 if state[row][col+1] == self.opp else 0
+                opp_score += -1 if state[row][col+2] == self.opp else 0
+                opp_score += -1 if state[row][col+3] == self.opp else 0
+                temp_score += 0 if state[row][col] == ' ' else 1 if state[row][col] == self.my_piece else -1
+                temp_score += 0 if state[row][col+1] == ' ' else 1 if state[row][col+1] == self.my_piece else -1
+                temp_score += 0 if state[row][col+2] == ' ' else 1 if state[row][col+2] == self.my_piece else -1
+                temp_score += 0 if state[row][col+3] == ' ' else 1 if state[row][col+3] == self.my_piece else -1
+                score = score if abs(score) > abs(temp_score) else temp_score
+                if((my_score == 1 and opp_score == -3) and self.my_piece == piece): # if true then blocking. 
+                    return 0.8
+        # find all scores of winning columns
+        for col in range(5):
+            for row in range(2):
+                temp_score = 0
+                my_score = 0
+                opp_score = 0
+                my_score += 1 if state[row][col] == self.my_piece else 0
+                my_score += 1 if state[row+1][col] == self.my_piece else 0
+                my_score += 1 if state[row+2][col] == self.my_piece else 0
+                my_score += 1 if state[row+3][col] == self.my_piece else 0
+                opp_score += -1 if state[row][col] == self.opp else 0
+                opp_score += -1 if state[row+1][col] == self.opp else 0
+                opp_score += -1 if state[row+2][col] == self.opp else 0
+                opp_score += -1 if state[row+3][col] == self.opp else 0
+                temp_score += 0 if state[row][col] == ' ' else 1 if state[row][col] == self.my_piece else -1
+                temp_score += 0 if state[row+1][col] == ' ' else 1 if state[row+1][col] == self.my_piece else -1
+                temp_score += 0 if state[row+2][col] == ' ' else 1 if state[row+2][col] == self.my_piece else -1
+                temp_score += 0 if state[row+3][col] == ' ' else 1 if state[row+3][col] == self.my_piece else -1
+                score = score if abs(score) > abs(temp_score) else temp_score
+                if((my_score == 1 and opp_score == -3) and self.my_piece == piece): # if true then blocking
+                    return 0.8
+        # find all scores of winning diagonals
+        for row in range(2):
+            for col in range(2):
+                temp_score = 0
+                my_score = 0
+                opp_score = 0
+                my_score += 1 if state[row][col] == self.my_piece else 0
+                my_score += 1 if state[row+1][col+1] == self.my_piece else 0
+                my_score += 1 if state[row+2][col+2] == self.my_piece else 0
+                my_score += 1 if state[row+3][col+3] == self.my_piece else 0
+                opp_score += -1 if state[row][col] == self.opp else 0
+                opp_score += -1 if state[row+1][col+1] == self.opp else 0
+                opp_score += -1 if state[row+2][col+2] == self.opp else 0
+                opp_score += -1 if state[row+3][col+3] == self.opp else 0
+                temp_score += 0 if state[row][col] == ' ' else 1 if state[row][col] == self.my_piece else -1
+                temp_score += 0 if state[row+1][col+1] == ' ' else 1 if state[row+1][col+1] == self.my_piece else -1
+                temp_score += 0 if state[row+2][col+2] == ' ' else 1 if state[row+2][col+2] == self.my_piece else -1
+                temp_score += 0 if state[row+3][col+3] == ' ' else 1 if state[row+3][col+3] == self.my_piece else -1
+                score = score if abs(score) > abs(temp_score) else temp_score
+                if((my_score == 1 and opp_score == -3) and self.my_piece == piece): # if true then blocking
+                    return 0.8
                 
-                my_score = max(my_score,temp_my)
-                temp_my = 0
-
-                if state[row][col] == self.opp:
-                    temp_op -= 1
-                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.opp:
-                    temp_op-=1
-                if row+2 < len(state) and col+2 < len(state[row]) and state[row+2][col+2] == self.opp:
-                    temp_op-=1
-                if row+3 < len(state) and col+3 < len(state[row]) and state[row+3][col+3] == self.opp:
-                    temp_op-=1
-
-                opp_score = min(opp_score,temp_op)
-                temp_op = 0
-
-                # Second Way
-                if state[row][col] == self.my_piece:
-                    temp_my += 1
-                if row+1 < len(state) and col-1 >=0 and state[row+1][col-1] == self.my_piece:
-                    temp_my+=1
-                if row+2 < len(state) and col-2 >= 0 and state[row+2][col-2] == self.my_piece:
-                    temp_my+=1
-                if row+3 < len(state) and col-3 >= 0 and state[row+3][col-3] == self.my_piece:
-                    temp_my+=1
                 
-                my_score = max(my_score,temp_my)
-                temp_my = 0
+        for row in range(3,5,1):
+            for col in range(2):
+                temp_score = 0
+                my_score = 0
+                opp_score = 0
+                my_score += 1 if state[row][col] == self.my_piece else 0
+                my_score += 1 if state[row-1][col+1] == self.my_piece else 0
+                my_score += 1 if state[row-2][col+2] == self.my_piece else 0
+                my_score += 1 if state[row-3][col+3] == self.my_piece else 0
+                opp_score += -1 if state[row][col] == self.opp else 0
+                opp_score += -1 if state[row-1][col+1] == self.opp else 0
+                opp_score += -1 if state[row-2][col+2] == self.opp else 0
+                opp_score += -1 if state[row-3][col+3] == self.opp else 0
+                temp_score += 0 if state[row][col] == ' ' else 1 if state[row][col] == self.my_piece else -1
+                temp_score += 0 if state[row-1][col+1] == ' ' else 1 if state[row-1][col+1] == self.my_piece else -1
+                temp_score += 0 if state[row-2][col+2] == ' ' else 1 if state[row-2][col+2] == self.my_piece else -1
+                temp_score += 0 if state[row-3][col+3] == ' ' else 1 if state[row-3][col+3] == self.my_piece else -1
+                score = score if abs(score) > abs(temp_score) else temp_score
+                if((my_score == 1 and opp_score == -3) and self.my_piece == piece): # if true then blocking
+                    return 0.8
+        # find all scores of winning boxes
+        for row in range(4):
+            for col in range(4):
+                temp_score = 0
+                my_score = 0
+                opp_score = 0
+                my_score += 1 if state[row][col] == self.my_piece else 0
+                my_score += 1 if state[row+1][col] == self.my_piece else 0
+                my_score += 1 if state[row+1][col+1] == self.my_piece else 0
+                my_score += 1 if state[row][col+1] == self.my_piece else 0
+                opp_score += -1 if state[row][col] == self.opp else 0
+                opp_score += -1 if state[row+1][col] == self.opp else 0
+                opp_score += -1 if state[row+1][col+1] == self.opp else 0
+                opp_score += -1 if state[row][col+1] == self.opp else 0
+                temp_score += 0 if state[row][col] == ' ' else (1 if state[row][col] == self.my_piece else -1)
+                temp_score += 0 if state[row+1][col] == ' ' else (1 if state[row+1][col] == self.my_piece else -1)
+                temp_score += 0 if state[row+1][col+1] == ' ' else (1 if state[row+1][col+1] == self.my_piece else -1)
+                temp_score += 0 if state[row][col+1] == ' ' else (1 if state[row][col+1] == self.my_piece else -1)
+                score = score if abs(score) > abs(temp_score) else temp_score
+                if((my_score == 1 and opp_score == -3)): # if true then blocking
+                    return 0.8
+        score = score/4
+        return score
 
-                if state[row][col] == self.opp:
-                    temp_op -= 1
-                if row+1 < len(state) and col-1 >= 0 and state[row+1][col-1] == self.opp:
-                    temp_op-=1
-                if row+2 < len(state) and col-2 >= 0 and state[row+2][col-2] == self.opp:
-                    temp_op-=1
-                if row+3 < len(state) and col-3 >= 0 and state[row+3][col-3] == self.opp:
-                    temp_op-=1
-
-                opp_score = min(opp_score,temp_op)
-                temp = 0
-                
-                # box
-                if state[row][col] == self.my_piece:
-                    temp += 1
-                if row+1 < len(state) and state[row+1][col] == self.my_piece:
-                    temp+=1
-                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.my_piece:
-                    temp+=1
-                if  col+1 < len(state[row]) and state[row][col+1] == self.my_piece:
-                    temp+=1
-                
-                my_score = max(my_score,temp)
-                temp = 0
-
-                if state[row][col] == self.my_piece:
-                    temp += 1
-                if row+1 < len(state) and state[row+1][col] == self.my_piece:
-                    temp+=1
-                if row+1 < len(state) and col+1 < len(state[row]) and state[row+1][col+1] == self.my_piece:
-                    temp+=1
-                if  col+1 < len(state[row]) and state[row][col+1] == self.my_piece:
-                    temp+=1
-                
-                opp_score = min(opp_score,temp)
-                temp = 0
-                
-
-        my_score = my_score/4
-        opp_score = opp_score/4
-
-        if(abs(my_score)>abs(opp_score) and self.my_piece == piece):
-            return my_score
-        elif(abs(my_score)>abs(opp_score) and self.my_piece != piece):
-            return abs(opp_score)
-        elif(abs(my_score)<abs(opp_score) and self.my_piece == piece):
-            return -1*my_score
-        elif(abs(my_score)>abs(opp_score) and self.my_piece != piece):
-            return opp_score
-        return 0
 
         # TODO: max part of minimax
     def max_value(self, state,depth):
-        alpha = -math.inf
-        max_successor = None
-        if(self.evaluate_game(state,self.my_piece) == 1 or depth == 0):
-            return self.evaluate_game(state,self.my_piece),None
+        if(self.hueristic_game_value(state,self.my_piece) == 1 or self.hueristic_game_value(state,self.my_piece) == -1 or depth == 0):
+            return self.hueristic_game_value(state,self.my_piece),None
         else:
-            successors = self.generate_successors(state,self.detect_drop_phase(state),self.my_piece)
+            successors = self.succ(state,self.my_piece)
+            rand = random.randint(0,len(successors)-1)
+            max_successor = successors[rand]
+            alpha = self.hueristic_game_value(self.generate_state(state=state,move=max_successor,piece=self.my_piece),self.my_piece)
+            # print("Alpha:",alpha)
             for successor in successors:
                 temp_state = self.generate_state(state,successor,self.my_piece)
                 alpha_prime,move = self.min_value(temp_state,depth-1)
+                move = successor if move == None else move
                 if(alpha < alpha_prime or alpha == -math.inf):
                     alpha = alpha_prime
                     max_successor = successor
@@ -270,15 +260,18 @@ class TeekoPlayer:
 
         # TODO: min part of minimax
     def min_value(self, state, depth):
-        alpha = math.inf
-        min_successor = state
-        if(self.evaluate_game(state,self.opp) == -1 or depth == 0):
-            return self.evaluate_game(state,self.opp),min_successor
+        if(self.hueristic_game_value(state,self.opp) == 1 or self.hueristic_game_value(state,self.opp) == -1 or depth == 0):
+            return self.hueristic_game_value(state,self.opp),None
         else:
-            successors = self.generate_successors(state,self.detect_drop_phase(state),self.opp)
+            successors = self.succ(state,self.opp)
+            rand = random.randint(0,len(successors)-1)
+            min_successor = successors[rand]
+            alpha = self.hueristic_game_value(self.generate_state(state=state,move=min_successor,piece=self.opp),self.opp)
+            # print("Alpha:",alpha)
             for successor in successors:
                 temp_state = self.generate_state(state,successor,self.opp)
-                alpha_prime,move = self.min_value(temp_state,depth-1)
+                alpha_prime,move = self.max_value(temp_state,depth-1)
+                move = successor if move == None else move
                 if(alpha > alpha_prime or alpha == math.inf):
                     alpha = alpha_prime
                     min_successor = successor
