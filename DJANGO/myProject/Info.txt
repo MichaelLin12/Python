@@ -1,2 +1,0 @@
-venv\Scripts\activate -> to activate virtual environment
-deactivate -> to deactivate virtual environment
