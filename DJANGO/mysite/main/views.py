@@ -38,6 +38,7 @@ def home(response):
     return render(response,"main/home.html",{})
 
 def create(response):
+    user = response.user
     if(response.method == "POST"):
         form = CreateNewList(response.POST)
 
