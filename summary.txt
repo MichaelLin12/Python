@@ -20,3 +20,12 @@ again.
 3. What has been a favorite school/personal project thus far? What about it that challenged you?
 
 My favorite project thus far has been the food donation project I did in last year's hackathon.
+Here, we as a group of four people combined our skillsets to come up with a way in which technology
+could help achieve one of the United Nations many goals for the world. After much deliberation,
+we came up with this idea to have grocery stores donate unsold food and for resturants to donate
+left over and unused food as well to pantries. We did this by building a website in React and
+connecting it with a Firebase Database. The most challenging part for me was the multitasking of
+having to code and having to be organize the group. It was just really difficult to have to manage
+my own tasks in terms of coding while also trying to think about what my group members should be
+doing and giving them reasonable objectives to achieve in a timely manner. Along with that, I had
+the task of helping some of group members get up to speed in coding in React.
