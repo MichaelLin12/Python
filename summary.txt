@@ -1,0 +1,22 @@
+1. Why did you choose the tools, libraries, and language you used for the coding exercise?
+
+I chose Python because it is a language that I know relatively well compared to other languages
+like Javascript, C, C++. Python also provides a lot of convienient packages that I can use such as
+the csv package that I used in this exercise to easily read the csv file. This combined with the fact that python has a really
+easy to use interface when it comes setting up a system to use Python when compared to Java, which is
+the language I am most familiar with.
+
+2. What are the advantages and disadvantages of your solution?
+
+I'd say my solution has the advantage of being relatively quick due to the fact that I am reading
+in the csv file without doing any other actions while the file is open. I'd also say my 
+code is easy to read because it is divided up into functions that each serve to do one and only one
+purpose. I'd say one disadvantage of my code is that my main function is redundant. I could have easily
+just placed the code in the main function inside of the if statement. I'd also say that I wasn't able
+to come up with a key to sort the list of arrays by time and by negative points. This means that i
+had to split the original array into two arrays and sorting both of them before recombining them
+again.
+
+3. What has been a favorite school/personal project thus far? What about it that challenged you?
+
+My favorite project thus far has been the food donation project I did in last year's hackathon.
