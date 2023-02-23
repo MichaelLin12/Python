@@ -41,7 +41,7 @@ def useRewards(rewards,amount):
             break
     return rewards
 
-# function to put the amount of rewards for each supplier in a dictionary
+# function to put the amount of rewards for each payer in a dictionary
 def package_left_over(left_over):
     if len(left_over) == 0:
         return dict()
