@@ -58,9 +58,6 @@ def package_left_over(left_over):
 
 def main(args):
     amount = int(args[1])
-    if amount <= 0:
-        print(dict())
-        return
     lines = read_csv(args[2])
     if len(lines) == 0:
         print(dict())
