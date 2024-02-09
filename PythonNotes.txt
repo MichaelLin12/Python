@@ -1,0 +1,147 @@
+-->String methods
+split(separator): Splits a string into a list of substrings based on the specified separator.
+join(iterable): Concatenates the elements of an iterable (e.g., a list) into a single string using the string as a separator.
+strip([characters]): Removes leading and trailing characters (whitespace by default) from a string.
+replace(old, new[, count]): Replaces occurrences of a substring with a new substring. The optional "count" parameter limits the number of replacements.
+find(sub[, start[, end]]): Searches for the first occurrence of a substring within a string and returns its index. Returns -1 if not found.
+index(sub[, start[, end]]): Returns the index of the first occurrence of a substring within a string. Raises an error if not found.
+count(sub[, start[, end]]): Returns the number of occurrences of a substring in a string.
+isdigit(): Returns True if all characters in the string are digits, otherwise returns False.
+isalpha(): Returns True if all characters in the string are alphabetic, otherwise returns False.
+isalnum(): Returns True if all characters in the string are alphanumeric, otherwise returns False.
+lower(): Converts all characters in the string to lowercase.
+upper(): Converts all characters in the string to uppercase.
+startswith(prefix[, start[, end]]): Checks if the string starts with the specified prefix.
+endswith(suffix[, start[, end]]): Checks if the string ends with the specified suffix.
+
+-->List methods
+append(element): Adds an element to the end of the list.
+extend(iterable): Appends all elements from the iterable to the end of the list.
+insert(index, element): Inserts an element at a specified index in the list.
+remove(element): Removes the first occurrence of the specified element from the list.
+pop([index]): Removes and returns the element at the specified index. If no index is provided, it removes and returns the last element.
+index(element[, start[, end]]): Returns the index of the first occurrence of the specified element in the list.
+count(element): Returns the number of occurrences of the specified element in the list.
+sort(): Sorts the list in ascending order.
+reverse(): Reverses the order of the elements in the list.
+clear(): Removes all elements from the list.
+
+-->Dictionary methods
+get(key[, default]): Returns the value associated with the specified key. If the key is not found, it returns the optional "default" value (or None if not provided).
+keys(): Returns a view object that contains all the keys in the dictionary.
+values(): Returns a view object that contains all the values in the dictionary.
+items(): Returns a view object that contains all key-value pairs in the dictionary as tuples.
+update([other]): Updates the dictionary with the key-value pairs from another dictionary or an iterable of key-value pairs.
+pop(key[, default]): Removes and returns the value associated with the specified key. If the key is not found, it returns the optional "default" value (or raises a KeyError if not provided).
+popitem(): Removes and returns an arbitrary key-value pair from the dictionary as a tuple. Raises a KeyError if the dictionary is empty.
+clear(): Removes all key-value pairs from the dictionary.
+copy(): Returns a shallow copy of the dictionary.
+
+-->Set methods
+add(element): Adds an element to the set.
+remove(element): Removes the specified element from the set. Raises a KeyError if the element is not found.
+discard(element): Removes the specified element from the set if it exists. Unlike remove(), it does not raise an error if the element is not found.
+pop(): Removes and returns an arbitrary element from the set. Raises a KeyError if the set is empty.
+clear(): Removes all elements from the set.
+copy(): Returns a shallow copy of the set.
+union(*others): Returns a new set that contains all unique elements from the set and other sets (or iterables) passed as arguments.
+intersection(*others): Returns a new set that contains common elements between the set and other sets (or iterables) passed as arguments.
+difference(*others): Returns a new set that contains elements present in the set but not in the other sets (or iterables) passed as arguments.
+symmetric_difference(other): Returns a new set that contains elements present in either the set or the other set, but not in both.
+issubset(other): Checks if the set is a subset of the other set (or iterable) and returns True or False.
+issuperset(other): Checks if the set is a superset of the other set (or iterable) and returns True or False.
+
+-->Tuple methods
+count(element): Returns the number of occurrences of the specified element in the tuple.
+index(element[, start[, end]]): Returns the index of the first occurrence of the specified element in the tuple.
+
+-->General purpose functions
+range(start, stop, step): Generates a sequence of numbers from start to stop (exclusive) with a specified step size.
+len(iterable): Returns the length of an iterable (e.g., list, string, dictionary, set).
+sorted(iterable[, key][, reverse]): Returns a new sorted list from the elements of an iterable. The optional "key" parameter specifies a custom sorting key, and the "reverse" parameter determines whether to sort in descending order.
+enumerate(iterable[, start]): Returns an iterator that generates pairs of the form (index, element) from an iterable. The optional "start" parameter specifies the starting index.
+zip(*iterables): Returns an iterator that generates tuples by aggregating elements from multiple iterables based on their index.
+map(function, iterable): Applies a function to each element of an iterable and returns an iterator with the results.
+filter(function, iterable): Applies a function to each element of an iterable and returns an iterator containing only the elements for which the function returns True.
+sum(iterable[, start]): Returns the sum of all elements in an iterable. The optional "start" parameter provides an initial value.
+max(iterable[, key]): Returns the maximum element from an iterable. The optional "key" parameter specifies a custom comparison key.
+min(iterable[, key]): Returns the minimum element from an iterable. The optional "key" parameter specifies a custom comparison key.
+any(iterable): Returns True if at least one element in the iterable is true, otherwise returns False.
+all(iterable): Returns True if all elements in the iterable are true, otherwise returns False.
+reversed(sequence): Returns an iterator that yields the elements of a sequence in reverse order.
+isinstance(object, classinfo): Checks if an object is an instance of a specified class or its subclasses and returns True or False.
+type(object): Returns the type of an object.
+
+
+-->Dealing with characters
+ord(character): Returns the Unicode code point of a character.
+chr(unicode): Returns the character corresponding to the specified Unicode code point.
+isdigit(): Returns True if a character is a digit (0-9), otherwise returns False.
+isalpha(): Returns True if a character is an alphabetic character (a-z or A-Z), otherwise returns False.
+isalnum(): Returns True if a character is alphanumeric (a-z, A-Z, or 0-9), otherwise returns False.
+islower(): Returns True if a character is a lowercase letter, otherwise returns False.
+isupper(): Returns True if a character is an uppercase letter, otherwise returns False.
+lower(): Converts a character to lowercase.
+upper(): Converts a character to uppercase.
+
+-->type conversion
+int(x): Converts x to an integer.
+float(x): Converts x to a floating-point number.
+str(x): Converts x to a string.
+bool(x): Converts x to a Boolean value.
+list(x): Converts x to a list.
+tuple(x): Converts x to a tuple.
+set(x): Converts x to a set.
+dict(x): Converts x to a dictionary.
+
+-->Math functions
+abs(x): Returns the absolute value of x.
+round(x[, ndigits]): Returns x rounded to ndigits decimal places. The default value of ndigits is 0.
+pow(x, y): Returns x raised to the power y.
+max(iterable): Returns the maximum element from an iterable.
+min(iterable): Returns the minimum element from an iterable.
+sum(iterable): Returns the sum of all elements in an iterable.
+math.sqrt(x): Returns the square root of x.
+math.log(x[, base]): Returns the logarithm of x to the given base. If no base is provided, it returns the natural logarithm of x.
+math.log2(x): Returns the base-2 logarithm of x.
+math.log10(x): Returns the base-10 logarithm of x.
+math.floor(x): Returns the largest integer less than or equal to x.
+math.ceil(x): Returns the smallest integer greater than or equal to x.
+math.pi: Returns the value of pi (3.141592...).
+math.e: Returns the value of e (2.718281...).
+
+-->Bitwise functions
+bin(x): Converts an integer to a binary string.
+hex(x): Converts an integer to a hexadecimal string.
+oct(x): Converts an integer to an octal string.
+int(x, base): Converts a string to an integer with the given base (2 <= base <= 36).
+
+-->Bitwise operators
+&: Bitwise AND
+|: Bitwise OR
+^: Bitwise XOR
+~: Bitwise NOT
+<<: Bitwise left shift
+>>: Bitwise right shift
+
+-->List Comprehensions
+[expression for item in iterable]
+[expression for item in iterable if condition]
+[expression if condition else expression for item in iterable]: [x if x % 2 == 0 else x * 2 for x in range(10)] --> [0, 2, 2, 6, 4, 10, 6, 14, 8, 18]
+
+-->Dictionary Comprehensions
+{key_expression: value_expression for item in iterable}
+{key_expression: value_expression for item in iterable if condition}
+
+-->Set Comprehensions
+{expression for item in iterable}
+{expression for item in iterable if condition}
+
+-->Slicing
+[start:stop:step]
+
+-->f-strings
+f"string {expression} string"
+
+-->Lambda Functions
+lambda arguments: expression
